@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Food Scanner — Marketing Website
 
-## Getting Started
+A modern "coming soon" landing page for the **Food Scanner** mobile app, with an
+email waitlist signup. Built with Next.js (App Router), TypeScript and Tailwind CSS v4.
 
-First, run the development server:
+## Features
+
+- Polished single-page landing site (hero, how-it-works, features, FAQ, CTA)
+- Email waitlist capture with a small API route
+- Fully responsive, green health-themed design
+- SEO + Open Graph metadata, branded SVG favicon
+- Scroll-reveal animations and an animated app mockup
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install      # already run during scaffolding
+npm run dev      # start the dev server at http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── layout.tsx              # Root layout + SEO metadata
+├── page.tsx                # Landing page (all sections)
+├── globals.css             # Theme tokens (brand palette) + animations
+├── icon.svg                # Branded favicon
+├── api/
+│   └── waitlist/route.ts   # POST endpoint for email signups
+└── components/
+    ├── Logo.tsx
+    ├── PhoneMockup.tsx      # Animated in-app result screen
+    ├── WaitlistForm.tsx     # Client-side signup form
+    ├── Reveal.tsx           # Scroll-reveal wrapper
+    └── icons.tsx            # SVG icon set
+```
 
-## Learn More
+## Waitlist storage
 
-To learn more about Next.js, take a look at the following resources:
+The waitlist API (`POST /api/waitlist` with `{ "email": "..." }`) automatically
+picks a backend based on which environment variables are set — no code changes
+needed:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Env vars set | Backend used |
+|---|---|
+| `WAITLIST_WEBHOOK_URL` | Posts each signup to your webhook (Google Sheet Apps Script, Zapier, Make, …) |
+| `RESEND_API_KEY` + `RESEND_AUDIENCE_ID` | Adds the contact to a [Resend](https://resend.com) audience |
+| _(none)_ | Local `data/waitlist.json` file — **dev only** (serverless filesystems are read-only) |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copy `.env.example` to `.env.local` and fill in whichever option you want. For
+production on a serverless host, use the webhook or Resend option.
 
-## Deploy on Vercel
+## Environment variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See `.env.example`. All are optional:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `NEXT_PUBLIC_SITE_URL` — your real domain (used for SEO, sitemap, robots, OG image)
+- `WAITLIST_WEBHOOK_URL` — generic webhook for signups
+- `RESEND_API_KEY` / `RESEND_AUDIENCE_ID` — Resend Audiences integration
+
+## Deploy
+
+The easiest path is [Vercel](https://vercel.com):
+
+```bash
+npm i -g vercel
+vercel            # follow the prompts
+```
+
+Then, in the Vercel dashboard, add your environment variables (`NEXT_PUBLIC_SITE_URL`
+and a waitlist backend) and redeploy. Or run a production build locally:
+
+```bash
+npm run build
+npm run start
+```
+
+## Pages & routes
+
+- `/` — landing page
+- `/privacy` — Privacy Policy (link this URL in your App Store / Google Play listing)
+- `/api/waitlist` — email signup endpoint
+- `/sitemap.xml`, `/robots.txt`, `/opengraph-image` — generated automatically
+
+## Customizing
+
+- **Brand colors** — edit the `--color-brand-*` tokens in `app/globals.css`.
+- **Copy** — all text lives in `app/page.tsx`.
+- **Store links** — once the app is live, replace the "Coming soon" badge and
+  waitlist CTA with real App Store / Google Play buttons.
+- **Domain / social image** — update `siteUrl` and add an `opengraph-image` in
+  `app/layout.tsx`.
