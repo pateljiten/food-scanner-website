@@ -1,0 +1,55 @@
+# Cloud Build pipeline: build the container, push to Artifact Registry, and
+# deploy to Cloud Run. Wire this to a trigger on your git repo so every push
+# to the chosen branch redeploys automatically.
+#
+# One-time setup (create the Artifact Registry repo referenced below):
+#   gcloud artifacts repositories create web \
+#     --repository-format=docker --location=$_REGION
+#
+# Override any _VAR below in the trigger's "Substitution variables" section.
+
+substitutions:
+  _REGION: us-central1
+  _REPO: web
+  _SERVICE: food-scanner-website
+
+steps:
+  # Build the image, tagging with both the commit SHA and "latest".
+  - name: gcr.io/cloud-builders/docker
+    id: Build
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest
+      - .
+
+  # Push both tags.
+  - name: gcr.io/cloud-builders/docker
+    id: Push
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}
+
+  # Deploy the freshly built image to Cloud Run.
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: Deploy
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY

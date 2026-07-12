@@ -63,6 +63,8 @@ See `.env.example`. All are optional:
 
 ## Deploy
 
+### Option A — Vercel
+
 The easiest path is [Vercel](https://vercel.com):
 
 ```bash
@@ -77,6 +79,44 @@ and a waitlist backend) and redeploy. Or run a production build locally:
 npm run build
 npm run start
 ```
+
+### Option B — Google Cloud Run
+
+This repo is container-ready: `next.config.ts` uses `output: "standalone"`, and
+the included `Dockerfile` produces a small production image (see also
+`.dockerignore`, `.gcloudignore`, `cloudbuild.yaml`).
+
+> **Important:** Cloud Run's filesystem is ephemeral, so the local
+> `data/waitlist.json` fallback will lose signups. Set a real backend
+> (`WAITLIST_WEBHOOK_URL` **or** `RESEND_API_KEY` + `RESEND_AUDIENCE_ID`) plus
+> `NEXT_PUBLIC_SITE_URL` as Cloud Run environment variables.
+
+**One-time setup** (replace `PROJECT_ID`; pick your region):
+
+```bash
+gcloud config set project PROJECT_ID
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
+gcloud artifacts repositories create web \
+  --repository-format=docker --location=us-central1
+```
+
+**Deploy from source** (builds the Dockerfile in the cloud — no local Docker needed):
+
+```bash
+gcloud run deploy food-scanner-website \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars NEXT_PUBLIC_SITE_URL=https://your-domain,WAITLIST_WEBHOOK_URL=https://...
+```
+
+Leave **min instances at 0** (the default) to stay within the free tier and pay
+nothing at low traffic. Only raise it if you want to avoid cold starts (~$5–10/mo).
+
+**Continuous deploys from git:** push this repo to GitHub/GitLab/Bitbucket, then
+either connect it via Cloud Run → *Create Service → Continuously deploy from a
+repository*, or create a Cloud Build trigger pointed at `cloudbuild.yaml`
+(override the `_REGION`, `_REPO`, `_SERVICE` substitutions if needed).
 
 ## Pages & routes
 
