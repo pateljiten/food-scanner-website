@@ -12,6 +12,7 @@ substitutions:
   _REGION: us-central1
   _REPO: web
   _SERVICE: food-scanner-website
+  _SITE_URL: https://foodscanner.co.in
 
 steps:
   # Build the image, tagging with both the commit SHA and "latest".
@@ -19,6 +20,8 @@ steps:
     id: Build
     args:
       - build
+      - --build-arg
+      - NEXT_PUBLIC_SITE_URL=${_SITE_URL}
       - -t
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA
       - -t
