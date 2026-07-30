@@ -34,9 +34,9 @@ export default function OpengraphImage() {
               border: "2px solid rgba(255,255,255,0.35)",
             }}
           >
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-9 0 8-4 12-9 12Z" />
-              <path d="M4 20c3-6 7-8 11-9" />
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-9 0 8-4 12-9 12Z" fill="#ffffff" />
+              <path d="M7.5 16.5c2.5-4.5 6-6.5 10.5-8" fill="none" stroke="#16a34a" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <span style={{ fontSize: "40px", fontWeight: 700 }}>Food Scanner</span>
