@@ -1,8 +1,15 @@
 import { ImageResponse } from "next/og";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const alt = "Food Scanner — Know what's really in your food";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+// Inline the app icon as a data URI so it renders inside the OG image.
+const iconSrc = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public", "app-icon.png")
+).toString("base64")}`;
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -22,23 +29,17 @@ export default function OpengraphImage() {
       >
         {/* Brand row */}
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <div
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={iconSrc}
+            width={76}
+            height={76}
+            alt="Food Scanner logo"
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "72px",
-              height: "72px",
               borderRadius: "20px",
-              background: "rgba(255,255,255,0.15)",
               border: "2px solid rgba(255,255,255,0.35)",
             }}
-          >
-            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-9 0 8-4 12-9 12Z" fill="#ffffff" />
-              <path d="M7.5 16.5c2.5-4.5 6-6.5 10.5-8" fill="none" stroke="#16a34a" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+          />
           <span style={{ fontSize: "40px", fontWeight: 700 }}>Food Scanner</span>
         </div>
 

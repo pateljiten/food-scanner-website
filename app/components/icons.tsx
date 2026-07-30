@@ -80,31 +80,6 @@ export function LeafIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// Filled leaf brand mark, matching the mobile app's app icon: a solid white
-// leaf with a vein carved out to reveal the green gradient behind it.
-export function LeafMark(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect width="64" height="64" rx="16" fill="url(#fsLeafGrad)" />
-      <path d="M27 47a17 17 0 0 1-17-17c0-12 10-22 39-22 0 20-10 30-22 30Z" fill="#ffffff" />
-      <path
-        d="M10 47c7-15 17-19 27-22"
-        fill="none"
-        stroke="url(#fsLeafGrad)"
-        strokeWidth={4.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <defs>
-        <linearGradient id="fsLeafGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#22c55e" />
-          <stop offset="1" stopColor="#15803d" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
-
 export function CheckIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" {...props}>
