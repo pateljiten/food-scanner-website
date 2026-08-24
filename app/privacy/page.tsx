@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const LAST_UPDATED = "July 11, 2026";
-const CONTACT_EMAIL = "privacy@foodscanner.app";
+const CONTACT_EMAIL = "contact.foodscanner@gmail.com";
 
 export default function PrivacyPage() {
   return (

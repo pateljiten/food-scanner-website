@@ -253,6 +253,10 @@ function Faq() {
       a: "Yes. The text recognition happens right on your device. We only send the extracted ingredient text for analysis — never your photos.",
     },
     {
+      q: "Is the health score medical advice?",
+      a: "No. The score and analysis are based only on the ingredients printed on the product label — not on your individual health, allergies, or medical conditions. Food Scanner doesn't determine whether a food is suitable for you personally. Always consult your doctor or a qualified professional for advice about your diet and health.",
+    },
+    {
       q: "Will it be free?",
       a: "There will be a free way to try Food Scanner. Full pricing details will be shared closer to launch with everyone on the waitlist.",
     },

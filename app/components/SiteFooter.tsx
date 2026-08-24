@@ -15,6 +15,16 @@ export default function SiteFooter() {
           © {new Date().getFullYear()} Food Scanner. All rights reserved.
         </p>
       </div>
+      <div className="border-t border-brand-100">
+        <p className="mx-auto max-w-6xl px-5 py-5 text-center text-xs leading-relaxed text-brand-950/45 sm:px-8">
+          <strong className="font-medium text-brand-950/60">Disclaimer:</strong>{" "}
+          Food Scanner&apos;s health score and analysis are based only on the
+          ingredients printed on the product label — not on your individual health,
+          allergies, or medical conditions. Results do not determine whether a food
+          is suitable for you. They are not medical advice; always consult your
+          doctor or a qualified professional about what&apos;s right for you.
+        </p>
+      </div>
     </footer>
   );
 }
